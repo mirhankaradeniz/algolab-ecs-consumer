@@ -1,0 +1,34 @@
+{
+  "family": "algolab-consumer",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::<ACCOUNT_ID>:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::<ACCOUNT_ID>:role/ecsTaskRole",
+  "containerDefinitions": [
+    {
+      "name": "d-consumer",
+      "image": "<ACCOUNT_ID>.dkr.ecr.eu-west-3.amazonaws.com/algolab-consumer:latest",
+      "essential": true,
+      "environment": [
+        { "name": "API_HOSTNAME",     "value": "<api-hostname>" },
+        { "name": "WSS_ENDPOINT",     "value": "wss://<domain>/ws" },
+        { "name": "DDB_LOGIN_TABLE",  "value": "algolabLoginData" },
+        { "name": "DDB_FEED_TABLE",   "value": "algolabWsDFeed" },
+        { "name": "ACCOUNT_NAME",     "value": "<TC_KIMLIK>" },
+        { "name": "SYMBOLS",          "value": "ALL" },
+        { "name": "AWS_REGION",       "value": "eu-west-3" },
+        { "name": "API_KEY",          "value": "API-XXXX" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/algolab-consumer",
+          "awslogs-region": "eu-west-3",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
